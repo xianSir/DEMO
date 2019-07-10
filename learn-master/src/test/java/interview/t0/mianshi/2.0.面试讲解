@@ -1,0 +1,140 @@
+
+JMM(java 内存模型)
+JMM编程特性：
+    可见性
+    原子性
+    有序性
+
+num++ 是三部操作 读 改变 赋值
+
+由于jvm运行的实体是线程，而每个线程创建时jvm都会为其创建一个工作内存[有些地方叫栈内存]，工作内存是每个线程私有的数据区域
+而java内存模型中规定所有的变量都存在主内存，主内存是内存共享区域，所有线程都可以访问，
+但线程对变量的操作是在工作内存中进行，首先要将变量从主内存中拷贝到自己的内存空间，
+    然后对变量进行操作，操作完成后再将变量写会主内存，不能直接操作主内存中的变量，各个线程中的工作内存存储的是主内存中边变量副本的拷贝、
+    因此不同的线程无法访问其他线程的工作内存，线程间的通信必须通过主内存来完成
+
+
+volatile[轻量级同步机制]
+    保证可见性
+    不保证原子性   参照：jvm/pic/15.图解volatile的非原子性.jpg  cpu进行线程调度，快于内存复制，所以可能出现先赋值的操作,快于先从 =====》解决：Automicxxx-->原理CAS-->Cas原理：
+    禁止指令重排[保证了有序]
+ demo:单例模式的双重检索机制 指令重排的解决；缓存元素 原因：缓存更新必须及时通知
+
+AntomicXXX原理：UnSafe+CAS[比较并交换直至比较成功][自旋]
+
+================ CAS  ================
+CAS[比较交换]   根据内存地址[内存偏移量]获取对象   CAS是CPU原子指令，不会造成所谓的数据不一致
+    CAS 是Automicxxx的底层实现 它的方法都是native 最终都是用汇编语言对地址值进行操作[jvm帮助实现汇编指令]--->最终调用的是CPU的原子性指令
+    1 Unsafe[位置：jvm运行jar包 rt.jar中]
+        是CAS的核心类，由于java无法直接访问底层系统，需要通过本地(native)方法来访问[java对native无能为力]
+        Unsafe相当于一个后门，基于该类可以直接操作特定内存的数据，Unsafe存在于sun.misc包中，其内部方法可以像c的指针一样直接操作内存，因为java中CAS的操作依赖与Unsafe类的方法
+        注意：Usafe中的所有方法都是native修饰的，也就是说Unsafe中的方法直接调用系统底层资源来执行相应任务
+        jvm会帮助我们实现CAS方法中的汇编指令
+缺点：
+    1 如果CAS一直不成功----->自旋事件过长，CPU开销大
+    2 只能保证一个共享变量的原子操作，加锁可以保证一段代码的原子性
+    3 ABA问题 中间过程不受监管 只管头尾
+
+
+解决方案：
+    时间戳:
+    版本号:
+悲观锁和乐观锁
+    独占锁：是一种悲观锁，synchronized就是一种独占锁，会导致其它所有需要锁的线程挂起，等待持有锁的线程释放锁。
+    乐观锁：每次不加锁，假设没有冲突去完成某项操作，如果因为冲突失败就重试，直到成功为止。
+
+================== ArrayList 线程不安全分析 位置： interview.t0.mianshi.test.T4_ArrayListCurrentXiuGaiExc  =============
+================== HashSet 线程不安全分析 位置： interview.t0.mianshi.test.T4_ArrayListCurrentXiuGaiExc  =============
+java在方法传递参数时，是将变量复制一份，然后传入方法体去执行。
+    此处区分封装类型与String
+    封装类型：原引用与被拷贝的引用地址值不同但是值指向的地址相同 改变是在改变 值
+    String 拷贝之后 值发生改变 是指向了新的地址值 与拷贝前的执行不同
+
+公平锁非公平锁：先来后到
+可重入锁(递归锁)：
+    指的是同一个线程外层函数获取到锁之后，内层函数仍能获取该锁的代码---->线程可以进入任何一个它已经拥有的锁所同步的代码块
+    ReentrantLock/Syschronized是典型的可重入锁
+    最大作用：避免死锁
+
+自旋锁：指尝试获取锁的线程不会立即阻塞，而是采用循环的方式去尝试获取锁，好处：减少上下文切换的消耗；缺点：循环会消耗CPU   demo:interview.t0.mianshi.test.T6_ZiXuanSuo
+
+读写锁：多个线程可以同时读一个资源类，不能同时写
+        总结：读-读 可共存 ；读-写 不能共存 ；写-写 不能共存
+        写操作的要求：原子+独占
+        demo:模拟缓存操作 -->interview.t0.mianshi.test.T7_ReadWriteLock
+
+CountDownLatch：减法
+CyclicBarrier:  加法
+Semaphore :    信号量：1 用于多个共享资源的互斥使用  2 用于并发线程数的控制
+
+==================== BlockQueue  ===============
+体系：
+    Collection-->List;Set;Queue-->...BlockQueue
+                -->ArrayBlockingQueue 数组结构的有届队列
+                -->LinkedBlockingQueue 链表结构的有届队列[最大值为int的最大值，也可视为无界队列]
+                -->SynchronousQueue   不存储元素的阻塞队列[单个元素的队列]
+                ==== 以上为常用
+                -->PriorityBlockingQueue 支持优先级的无界阻塞队列
+                -->DelyQueue  使用优先级队列实现的延迟无界阻塞队列
+                -->LinkedTransferQueue 由链表组成的无界阻塞队列
+                -->LinkedBlockingDequeue 由链表组成的双向阻塞队列
+
+======================== 线程池底层是阻塞队列 ===================
+线程池的主要工作是控制运行的线程的数量，处理过程将任务放入队列，然后在线程创建后启动这些任务，如果线程数量超过了最大数量，超出数量的线程
+排队等候，等其他线程执行完毕，再从队列中取出任务来执行
+
+～～～～～主要特点：线程复用，控制最大并发数，管理线程
+
+优点：
+    1 降低资源消耗 通过重复利用已创建的线程 降低线程创建和销毁造成的消耗
+    2 提高相应速度 当任务到达时，任务可以不用等到线程创建就立即执行
+    3 提高线程的可管理型，线程是稀缺资源，如果无限制的创建，不仅会消耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控
+
+～～～～～ 线程池的几大参数及作用
+
+    参数
+   -------》表面5参----->实际7参[方法重载]
+            public ThreadPoolExecutor(int corePoolSize,
+                                      int maximumPoolSize,
+                                      long keepAliveTime,
+                                      TimeUnit unit,
+                                      BlockingQueue<Runnable> workQueue) {
+                this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
+                     Executors.defaultThreadFactory(), defaultHandler);
+            }
+
+
+    ------》7参：***************** 参数详解
+        public ThreadPoolExecutor(    int corePoolSize,     //核心常驻线程
+                                      int maximumPoolSize,  //能够容纳同时执行的最大线程数，必须大于1[包括核心线程数与空闲线程数]
+                                      long keepAliveTime,  //多余的空闲线程存活事件--当空闲线程达到keepAliveTime值时，多余线程会被销毁到只剩下核心常驻线程
+                                      TimeUnit unit,     //事件单位
+                                      BlockingQueue<Runnable> workQueue,  //任务队列，被提交但尚未执行的任务；[发现核心常驻线程都被占用后，任务会在此等待]---[此处满了后线程池会扩容，扩容最大限制为keepAliveTime]
+                                      ThreadFactory threadFactory,      //线程工厂[生成线程中的工作线程，一般使用默认]
+                                      RejectedExecutionHandler handler) {   //线程池的拒绝策略[有4个实现]
+                ...
+        拒绝策略：JDK内置策略
+            AbortPolice[默认]：直接抛异常[RejectExecutionException]异常阻止系统正常运行
+            CallRunsPolicy: 将任务回退到调用者
+            DiscardOldestPolicy:丢弃等待最久的任务
+            DiscardPolicy:直接丢弃任务，也不抛出异常
+
+   实际中线程池的使用：阿里巴巴规范：线程池不允许使用Executors创建；而是通过 ThreadPoolExecutor[Executors底层的创建方式]--->参考图
+        JDK的线程池 个别底层使用的是无尽队列，队列允许的最大长度为int的最大值，可能会堆积大量请求，导致oom
+        eg:fixedThreadPool SingleThreadPool CacheThreadPool ScheduledThreadPool
+   手写线程池：interview.t0.mianshi.test.T15_MyThreadPool
+ 蚂蚁金服面试题：线程池最大核数设置
+    1 先查看服务器cpu核数
+    2 cpu密集型[计算密集--真正的多核才能实现]：配置尽可能少的线程数---一般公式：cpu核数+1[没核负责一个线程，减少线程间的切换]
+    3 IO密集[大量的阻塞]：并不是一直在执行任务，配置尽可能多的线程[大限度的利用被阻塞的时间]-->cpu核数*2
+        大厂实践参数公式：cpu核数/(1-阻塞系数)  [阻塞系数范围:0.8-0.9] eg:8核-->8/(1-0.9)==80个线程数
+
+-------------  死锁[原因，排除]
+排除
+ 1jps -l  //java查看进程命令  查进程编号
+ 2jstck    根据进程编号查询异常堆栈信息
+
+
+
+
+

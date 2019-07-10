@@ -1,0 +1,153 @@
+非原子：
+    eg:a++/a-- 读取，改变，写入
+
+------------------  马士兵并发编程 ----------------
+sychronized(this) 锁定的是当前对象，而不是代码块  如果有另一个代码块没有加锁，那么执行这个方法的时候不需要看对象有没有锁
+静态锁锁定的是       class/字节码对象
+脏读               读到在写还没有完成的数据   读未加锁 而写加锁但未完成
+sychronized 锁可重入  同一类中 或者 子类同步方法调用父类的同步方法
+锁遇到异常会被释放   其他线程得到的是执行到一半的代码
+sychronized  锁的信息记录在引用指向的地址上 而不是引用上
+---------------------------  volatile
+Java 中的线程通信  使用共享内存
+所有线程共享主内存
+每个线程有自己的工作内存[线程自己的内存+cpu缓冲区]   线程使用主内存中的变量 是先将变量读到自己的缓冲区 如果没加 volatile 一直使用的都是自己缓冲区中的内容，主内存中变量发生变化，此线程中不知道
+volatile          标记的变量如果发生改变[某一线程对它做了修改，会把此变量写回主内存]会通知其他线程 他们的缓冲区的内容 已经过期 需要再次从 主内存读取
+    线程间的变量可见性  也叫无锁同步
+    eg:cocurrentHashMap
+
+sychronized 与 volatile：
+    sy..既保证了可见性，又保证了原子性,效率低
+    vo..只保证了可见性，不能保证多个线程修改vo..修饰的变量 所带来的不一致问题，效率高
+
+简单的数字运算：Atomic... 原子性操作
+    两个原子性操作还会存在原子性问题--发生在两个原子性之间
+     if (cou.get()<100)
+                    cou.incrementAndGet();
+     不符合原子性的结果eg:      --->变量最终值：1001
+     atomic是否保证可见性：是 已验证
+----------------------------------wait() notify() sleep()
+只有wait() 会释放锁
+----------------------------------门闩 不会锁定任何对象 效率最高
+
+题：往一个容器中添加元素，当元素数量等于5时进行提示    多线程实现，添加与获取数量放在两个线程上
+实现：T10readCount
+    volatile
+    wait notify  必须在锁内使用 锁.wait()  锁.notify()
+    门闩    CountDownLatch c = new CountDownLatch(1);//参数为闩数量
+----------------------------  手工锁
+    ReentrantLock lock = new ReentrantLock();
+    1.模拟sychrnized
+    2.尝试连接
+    3.公平锁
+         //公平锁--谁等的时间长就谁优先得到锁
+         ReentrantLock lock = new ReentrantLock(true);
+
+----------------------  生产者消费者  T11_ProducAndCou
+----------------------  ThreadLocal
+
+=====================================================  JUC =============================================
+单例模式四种方式
+线程安全：容器是安全了或者不安全类都存在的问题  vector每个方法都加了锁
+        判断与读写分离存在线程安全问题  在判断与操作之间  会存在线程抢资源   解决方案：判读与操作放在同步代码块中[加锁]
+
+------------------------ map/set -------------------------
+map与set原理一样不过是 map是kv set是k
+
+无并发场景：hashmap  hashset
+并发较低：  Collections.sychronizedXXX()  hashtable
+并发较高：  concurrentHashMap  ConcurrentSet
+并发高且排序： ConcurrentSkipListMap  ConcurrentSkipListSet
+写时复制：Copy-On-Write 读可能不会立即读到最新的数据-->最终一致性。:https://www.cnblogs.com/hapjin/p/4840107.html
+     * 写时复制  写的时候复制一份 写完再将引用指向复制后的地址
+          * 读不涉及安全问题
+
+
+
+
+//创建同步集合的一种方式---并发低的时候使用
+Collection<Object> objects = Collections.synchronizedCollection(new ArrayList<>());
+
+//hashmap hashtable concurrenthashmap区别
+//hashmap[key,value可以为null] hashtable[操作时需要锁定整个对象，key,value不能为null，为了线程安全？]
+//concurrenthashmap[分段锁默认16，segement在实现上继承了ReetrantLock,操作时只需锁定某一段，有些方法需要跨段，比如size()和containsValue()，它们可能需要锁定整个表而而不仅仅是某个段，这需要按顺序锁定所有段，操作完毕后，又按顺序释放所有段的锁]
+                        1.8后采用cas无锁算法
+//1.7与1.8的区别
+https://blog.csdn.net/hellodake/article/details/82386027
+https://www.cnblogs.com/heyonggang/p/9112731.html
+ConcurrentSkipListMap   高并发环境下并且需要排序 不安全的map对应treemap
+
+------------------------ queue java.util.queue ---------------------
+1.并发的加锁的
+    concurrentLinkedQueue[无界队列，直到内存消耗完]  offer加数据，有返回值判断是否添加成功  size poll获取值并取出  peak只获取值
+    ConcurrentLinkedDeque[双向]
+    concurrentArrayQueue   有大小限制
+2.阻塞式 blockqueue
+    LinkedBlockingQueue[无界队列,直到内存消耗完]
+        put 如果容器满了，就会等待
+        take 如果容器空了，就会等待
+    ArrayBlockingQueue[有界]
+        put 无限阻塞
+        add 容器满了再添加会报错
+        offer 容器满了会返回boolean是否添加成功，还有一个重载方法，设置延时
+    DelayQueue：是一个无界的BlockingQueue，用于放置实现了Delayed接口的对象，其中的对象只能在其到期时才能从队列中取走。
+        这种队列是有序的，即队头对象的延迟到期时间最长。注意：不能将null元素放置到这种队列中。
+    CopyOnWriteArrayList 写少读多  读不需加锁无变化
+    LinkedTransferQueue 的特殊方法 transfer 如果有消费者将信息直接交给消费者，如果没有就阻塞
+    SynchronousQueue 容量为0 特殊的LinkedTransferQueue    得有消费者 put 将信息交给消费者  调用add refers 报错
+         /**
+             * 先启动消费者--生产数据时如果有消费者就直接将数据给消费者
+             * 如果先启动生产者 但是没有消费者 transfer 就会阻塞
+             * add put transfer正常
+             */
+======================================================================================================
+================================   线程池对以上的封装     ===============================================
+================================    T13_ThreadPool     ===============================================
+Executor
+    顶层接口
+ExcutorService「跑在后台等着执行任务」
+    public interface ExecutorService extends Executor {
+        ...
+        submit(Runable r)
+        submit(Callable r)
+
+    }
+
+Callable  有返回值，可抛异常[区别于Runable]
+Executor[Executor的工具类，全是静态方法]
+
+
+线程池维护着两个队列：未使用的线程，已结束的线程
+    要从线程池中拿线程，如果线程池中都在被使用，那么会阻塞在 线程池维护的一个BlockQueue中
+
+FutureTask<Integer> task = new FutureTask<>(new Callable<Integer>() {
+    task.get()//阻塞等结果
+
+=================================== 线程池的6种  容器全是BlockQueue
+demo:多线程并行计算[线程池]
+//四种线程池+2 总共6种
+https://www.cnblogs.com/zhujiabin/p/5404771.html
+    ...
+    newScheduledThreadPool线程可复用[容器DelayQueue] 与 Timer不一样它是每次都是一个新线程
+    newWorkStealingPool     场景：任务分配的不均匀  底层是：ForkJoinPool
+    ForkJoinPool            分而治之
+
+ThreadPoolExecutor大多数线程池背后都是这个类 [获取实例]  ForkJoinPool除外[它直接继承了 AbstractExecutorService]
+    eg:
+    public static ExecutorService newCachedThreadPool() {
+            return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                          60L, TimeUnit.SECONDS,
+                                          new SynchronousQueue<Runnable>());
+        }
+    自定义线程：
+                            起始线程   最大线程       存活时间   单位             容器BlockQueue[具体类]
+        new ThreadPoolExecutor(0, Integer.MAX_VALUE,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>());
+
+
+======================================= jdk8 stream
+stream
+ParallelStream 多线程流
+
+
+netty 在nio的基础上进行封装
+
