@@ -63,8 +63,8 @@ public class NettyClient {
 
     public static void main(String[] args) throws Exception, InterruptedException {
         NettyClient client = new NettyClient();
-        //BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        client.sendMessage("hello"+"\r\n");
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        client.sendMessage(in.readLine()/*"hello"+"\r\n"*/);
         System.out.println("消息发送成功");
     }
 
