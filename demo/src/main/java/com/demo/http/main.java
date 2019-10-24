@@ -1,12 +1,18 @@
 package com.demo.http;
 
+import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author xks
@@ -14,7 +20,7 @@ import java.io.*;
  */
 public class main {
     public static void main(String[] args) throws IOException {
-        File file = new File("E:\\LEARN\\JAVA_SE\\src\\main\\resources\\a.txt");
+        File file = new File("F:\\A_IDEA_WORK\\study\\demo\\b.txt");
         BufferedReader reader = null;
         try {
             System.out.println("以行为单位读取文件内容，一次读一行");
@@ -53,6 +59,26 @@ public class main {
             }
         }
 
+    }
+    public void HttpReadJsp() throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        // 建立HttpPost对象
+        HttpGet httppost = new HttpGet("http://qq.ip138.com/idsearch/index.asp?userid=34252119570111701X&action=idcard");
+        httppost.addHeader("Content-type", "text/html");
+        httppost.addHeader("Connection", "keep-alive");
+        httppost.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.87 Safari/537.36");
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        // 建立一个NameValuePair数组，用于存储欲传送的参数
+        params.add(new BasicNameValuePair("q","370625197005062936" ));
+        String result = null;
+        // httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+        CloseableHttpResponse response = httpClient.execute(httppost);
+        System.out.println();
 
+        String s = EntityUtils.toString(response.getEntity(), Charset.forName("utf-8"));
+        String[] split = s.split("\r\n");
+        for (int i=0;i<split.length;i++){
+            System.out.println(i+split[i]);
+        }
     }
 }
