@@ -1,5 +1,6 @@
 package com.demo.http;
 
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -20,7 +21,8 @@ import java.util.List;
  * @date 2019-04-19
  */
 public class main {
-    public static void main(String[] args) throws IOException, URISyntaxException {
+    public static void main(String[] args) throws Exception {
+        downloadFile();
     }
 
     private static void createio() throws IOException {
@@ -79,19 +81,23 @@ public class main {
         }
     }
 
-    public static void downloadFile(String fileName, String filePath) throws Exception {
+    public static void downloadFile() throws Exception {
         String decode = URLEncoder.encode("刘冬方反.jpg", "UTF-8");
         URL url = new URL("http://60.212.191.103:8900/file/contracts/2F7B7977A8894D5E8B4A5D8E2013FFAC_"+decode);
         URLConnection connection = url.openConnection();
-        connection.connect();
+        connection.setConnectTimeout(5*1000);
         InputStream in = connection.getInputStream();
-        File des = new File("G:\\"+fileName);
+        File des = new File("G:/刘冬方反.jpg");
         des.createNewFile();
         FileOutputStream out = new FileOutputStream(des);
-        byte[] arr=new byte[1024*3];
-        while ((in.read(arr)>0)){
-            out.write(arr, 0, arr.length);
+        int len=-1;
+        int i=0;
+        byte[] arr=new byte[1024];
+        while ((len = in.read(arr)) != -1){
+            out.write(arr,0,len);
+            i+=arr.length;
         }
+        System.out.println(i);
         in.close();
         out.close();
     }
@@ -116,5 +122,41 @@ public class main {
         for (int i=0;i<split.length;i++){
             System.out.println(i+split[i]);
         }
+    }
+
+
+    public static byte[] openFile(String filePath) {
+        try {
+            String url = filePath.substring(0, filePath.lastIndexOf('/') + 1);
+            String filename = filePath.substring(filePath.lastIndexOf('/') + 1);
+            filename = URLEncoder.encode(filename, "UTF-8");
+            filename = filename.replaceAll("\\+", "%20");
+            URL httpUrl = new URL(url + filename);
+            HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(5 * 1000);
+            InputStream inStream = conn.getInputStream();//通过输入流获取图片数据
+            byte[] btImg = readInstream(inStream);//得到图片的二进制数据 return btImg;
+            return btImg;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //读取流文件的内容
+    private static byte[] readInstream(InputStream inputStream) throws Exception {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); //创建ByteArrayOutputStream 对象
+        byte[] buffer = new byte[1024];//声明缓冲区
+        int length = -1;//定义读取默认长度
+        while ((length = inputStream.read(buffer)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, length);
+            //把缓存区中输出到内存中
+        }
+
+        byteArrayOutputStream.close(); //关闭输出流
+        inputStream.close(); //关闭输入流
+        return byteArrayOutputStream.toByteArray();
     }
 }
