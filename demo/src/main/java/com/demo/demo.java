@@ -1,3 +1,4 @@
+/*
 package com.demo;
 
 import java.io.*;
@@ -10,10 +11,12 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+*/
 /**
  * @author xks
  * @date 2019-05-20
- */
+ *//*
+
 public class demo {
     public static void main(String[] args) throws Exception {
 
@@ -45,3 +48,4 @@ public class demo {
         System.out.println(a.out(3, 5));
     }
 }
+*/

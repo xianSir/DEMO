@@ -10,6 +10,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.io.*;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,25 @@ import java.util.List;
  * @date 2019-04-19
  */
 public class main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
+    }
+
+    private static void createio() throws IOException {
+        URL url = new URL("http://60.212.191.103:8900/file/contracts/2F7B7977A8894D5E8B4A5D8E2013FFAC_刘冬方反.jpg");
+        URLConnection connection = url.openConnection();
+        InputStream in = connection.getInputStream();
+        File des = new File("G:\\demo.png");
+        des.createNewFile();
+        FileOutputStream out = new FileOutputStream(des);
+        byte[] arr=new byte[1024*3];
+        while ((in.read(arr)>0)){
+            out.write(arr, 0, arr.length);
+        }
+        in.close();
+        out.close();
+    }
+
+    private static void readFileHttp() {
         File file = new File("F:\\A_IDEA_WORK\\study\\demo\\b.txt");
         BufferedReader reader = null;
         try {
@@ -58,8 +77,25 @@ public class main {
                 }
             }
         }
-
     }
+
+    public static void downloadFile(String fileName, String filePath) throws Exception {
+        String decode = URLEncoder.encode("刘冬方反.jpg", "UTF-8");
+        URL url = new URL("http://60.212.191.103:8900/file/contracts/2F7B7977A8894D5E8B4A5D8E2013FFAC_"+decode);
+        URLConnection connection = url.openConnection();
+        connection.connect();
+        InputStream in = connection.getInputStream();
+        File des = new File("G:\\"+fileName);
+        des.createNewFile();
+        FileOutputStream out = new FileOutputStream(des);
+        byte[] arr=new byte[1024*3];
+        while ((in.read(arr)>0)){
+            out.write(arr, 0, arr.length);
+        }
+        in.close();
+        out.close();
+    }
+
     public void HttpReadJsp() throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         // 建立HttpPost对象
