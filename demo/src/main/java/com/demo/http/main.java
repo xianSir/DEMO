@@ -92,6 +92,7 @@ public class main {
         FileOutputStream out = new FileOutputStream(des);
         int len=-1;
         int i=0;
+        //注意数组长度 否则文件不正确
         byte[] arr=new byte[1024];
         while ((len = in.read(arr)) != -1){
             out.write(arr,0,len);
