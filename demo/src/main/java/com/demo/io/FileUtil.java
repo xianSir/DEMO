@@ -295,5 +295,22 @@ public class FileUtil {
 			return false;
 		}
 	}
+    public static String readDir(String path) {
+        // File对象 可以是文件或者目录
+        File file = new File(path);
+        if(file.isDirectory()) {
+            File[] array = file.listFiles();
+            for (int i = 0; i < array.length; i++) {
+                if(array[i].isFile()) {
+                    System.out.println("文件名称" + array[i].getName());
+                    System.out.println("文件" + array[i]);
+                    System.out.println("文件路径" + array[i].getPath());
+                } else if(array[i].isDirectory()) {
+                    readDir(array[i].getPath());
+                }
+            }
+        }
+        return null;
+    }
 
 }

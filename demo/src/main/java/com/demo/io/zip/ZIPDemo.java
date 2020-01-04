@@ -1,6 +1,11 @@
 package com.demo.io.zip;
 
+import com.github.junrar.Archive;
+import com.github.junrar.rarfile.FileHeader;
+
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -19,6 +24,12 @@ public class ZIPDemo {
         zip(zipFileName, entries);
     }
 
+    /**
+     * 压缩文件
+     * @param zipFileName
+     * @param zipEntries
+     * @throws Exception
+     */
     public static void zip(String zipFileName, String[] zipEntries) throws Exception {
 
 
@@ -57,7 +68,11 @@ public class ZIPDemo {
         bis.close();
     }
 
-
+    /**
+     * 解压zip文件
+     * @param zipFileName
+     * @param unzipdir
+     */
     public static void unzip(String zipFileName, String unzipdir) {
         try (ZipInputStream zis = new ZipInputStream(new BufferedInputStream(
                 new FileInputStream(zipFileName)))) {
@@ -100,5 +115,64 @@ public class ZIPDemo {
             parent.mkdirs();
         }
         file.createNewFile();
+    }
+
+    /**
+     * 解压rar文件
+     * @param srcRarPath
+     * @param dstDirectoryPath
+     * @return
+     */
+    public static List<String> RarFiles(String srcRarPath, String dstDirectoryPath) {
+        List<String> list = new ArrayList<String>();
+        if(!srcRarPath.toLowerCase().endsWith(".rar")) {
+            System.out.println("非rar文件！");
+            return list;
+        }
+        File dstDiretory = new File(dstDirectoryPath);
+        if(!dstDiretory.exists()) {// 目标目录不存在时，创建该文件夹
+            dstDiretory.mkdirs();
+        }
+        Archive a = null;
+        try {
+            a = new Archive(new FileInputStream(new File(srcRarPath)));
+            if(a != null) {
+                // a.getMainHeader().print(); // 打印文件信息.
+                FileHeader fh = a.nextFileHeader();
+                while (fh != null) {
+                    // 防止文件名中文乱码问题的处理
+                    String fileName = fh.getFileNameW().isEmpty() ? fh
+                            .getFileNameString() : fh.getFileNameW();
+                    list.add(fileName);
+                    if(fh.isDirectory()) { // 文件夹
+                        File fol = new File(dstDirectoryPath + File.separator
+                                + fileName);
+                        fol.mkdirs();
+                    } else { // 文件
+                        File out = new File(dstDirectoryPath + File.separator
+                                + fileName.trim());
+                        try {
+                            if(!out.exists()) {
+                                if(!out.getParentFile().exists()) {// 相对路径可能多级，可能需要创建父目录.
+                                    out.getParentFile().mkdirs();
+                                }
+                                out.createNewFile();
+                            }
+                            FileOutputStream os = new FileOutputStream(out);
+                            a.extractFile(fh, os);
+                            os.close();
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                    fh = a.nextFileHeader();
+                }
+                a.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+
     }
 }
