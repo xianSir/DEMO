@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.rmi.Naming;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -143,17 +144,35 @@ public class FileUtil {
 		return byteArrayOutputStream.toByteArray();
 	}
 
-	public static void main(String[] aa) {
-		String url = "http://192.168.0.134:8900/file/helpCenterDownload/B219DC33E3AE40DB80A0D348E104B61C_住建委测试数据说明.txt";
+	public static void main(String[] aa) throws IOException {
+        File file = new File("G:\\dx二级单位1_批量人员1_9987_男.jpg");
+        String name="批量人员";
+        String num="9987";
+        String sex="男.jpg";
+        for (int i=1;i<300;i++){
+            File file1 = new File("G:\\imgs\\dx二级单位1_" + name + i + "_" + (Integer.parseInt(num) + i) + "_" + sex);
+            copyFileUsingFileStreams(file,file1);
+        }
+    }
 
-		byte[] sdfs = openFile(url);
-		System.out.println("1212" + sdfs);
+    private static void copyFileUsingFileStreams(File source, File dest)
+            throws IOException {
+        InputStream input = null;
+        OutputStream output = null;
+        try {
+            input = new FileInputStream(source);
+            output = new FileOutputStream(dest);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = input.read(buf)) > 0) {
+                output.write(buf, 0, bytesRead);
+            }
+        } finally {
+            input.close();
+            output.close();
+        }
+    }
 
-		BASE64Encoder encoder = new BASE64Encoder();
-		String base64 = encoder.encode(sdfs);
-
-		System.out.println("base64-----" + base64);
-	}
 
 	public static String fileUpload(byte[] bytes, String fileUrl, String path) throws Exception {
 		String resultSet = null;
@@ -295,6 +314,7 @@ public class FileUtil {
 			return false;
 		}
 	}
+
     public static String readDir(String path) {
         // File对象 可以是文件或者目录
         File file = new File(path);
