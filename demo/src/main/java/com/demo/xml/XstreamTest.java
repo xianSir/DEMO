@@ -25,7 +25,7 @@ public class XstreamTest {
     public static void main(String[] args) {
 //        Dom4JDriver dom4JDriver = new Dom4JDriver();
 //        dom4JDriver.getOutputFormat().setEncoding("GBK");
-
+//不进行特殊字符处理 new StaxDriver(new NoNameCoder())
         StaxDriver staxDriver=new StaxDriver();
         XStream xStream = new XStream(staxDriver);
         DataModel model = new DataModel();
