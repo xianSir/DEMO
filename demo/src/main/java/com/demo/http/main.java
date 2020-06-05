@@ -39,7 +39,7 @@ public class main {
             CloseableHttpResponse execute = build.execute(httpGet);
             HttpEntity entity = execute.getEntity();
             String s1 = EntityUtils.toString(entity);
-            System.out.println("正在执行第"+count+"返回值"+s1);
+            System.out.println("正在执行第 "+count+"  返回值   "+s1);
             Thread.sleep(1*500);
         }
 
