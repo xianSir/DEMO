@@ -29,7 +29,11 @@ public class CompletionfFuture {
         System.out.println(s1);
         String s2 = CompletableFuture.completedFuture("nothing").get();
         System.out.println("s2: "+s2);
-
+        CompletableFuture cf = CompletableFuture.completedFuture("message").thenApplyAsync(s -> {
+            return s.toUpperCase();
+        });
+        Object o = cf.get();
+        System.out.println(o);
     }
 
 }
