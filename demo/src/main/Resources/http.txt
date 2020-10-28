@@ -1,8 +1,0 @@
-http://60.212.191.103:18081/smz-app/transferData/initCompany.shtml
-http://60.212.191.103:18081/smz-app/transferData/initLaborCompany.shtml
-http://60.212.191.103:18081/smz-app/transferData/initProject.shtml
-http://60.212.191.103:18081/smz-app/transferData/initProjectCompanyRelation.shtml
-http://60.212.191.103:18081/smz-app/transferData/initTeam.shtml
-http://60.212.191.103:18081/smz-app/transferData/initWorker.shtml
-http://60.212.191.103:18081/smz-app/transferData/initProjectTeamWork.shtml
-http://60.212.191.103:18081/smz-app/transferData/initPoint.shtml
