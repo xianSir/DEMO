@@ -15,7 +15,7 @@ import java.util.Iterator;
  * @author xks
  * @date 2019-03-22
  */
-public class demo {
+public class demoExcel {
     public static void main(String[] args) throws Exception {
 //       readXLSDemo();
         createFileDemo();
