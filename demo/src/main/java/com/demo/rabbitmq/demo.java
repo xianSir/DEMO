@@ -63,8 +63,11 @@ public class demo {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 System.out.println("获取消费信息  :"+new String(body)+" 。"+envelope.toString());
-//                channel.basicAck(envelope.getDeliveryTag(),false);
-                channel.basicRecover();
+                if(envelope.isRedeliver()){
+                    channel.basicAck(envelope.getDeliveryTag(),false);
+                }else {
+                    channel.basicRecover();
+                }
             }
         });
     }
