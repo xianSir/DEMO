@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * @author xks
  * @date 2021-01-15
  */
-public class demo {
+public class cglibDemo {
 
 
     public static void main(String[] args) {
@@ -20,7 +20,6 @@ public class demo {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(UserService.class);
         enhancer.setCallback(new AutoMethodInterceptor());
-
         UserService userService = (UserService)enhancer.create();
 
         userService.saveUser();
