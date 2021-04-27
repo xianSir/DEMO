@@ -1,0 +1,10 @@
+#YamlPropertySourceLoader 加载yaml作为 properties
+#YamlPropertySourceLoader类可用于暴露YAML作为PropertySource在 spring Environment
+#YamlPropertiesFactoryBean :Properties
+#YamlMapFactoryBean  :map
+name: xks
+age: 18
+my:
+  servers:
+    - dev.example.com
+    - another.example.com

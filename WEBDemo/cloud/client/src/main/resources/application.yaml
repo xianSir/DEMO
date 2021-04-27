@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+
+spring:
+  application:
+    name: server-eureka
+  boot:
+    admin:
+      client:
+        url:  http://192.168.0.18:8080/
+
+
+# 用过过程中注意hostname顺序  !!! 否则会造成注册不到服务中心
+#配置集群是 serviceUrl为全部的注册中心地址 用 , 分隔 并允许注册中心注册自己
+eureka:
+  instance:
+    hostname: two
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone : http://one:8080/eureka/  #,http://two:8081/eureka/
+    #fetch-registry: false
+    #register-with-eureka: false
+
+
+

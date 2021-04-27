@@ -1,0 +1,11 @@
+echo "开始启动redis zookeeper软件"
+redisPath="/opt/redis/src"
+zookeeperPath="/opt/zookeeper/bin"
+
+echo "开始启动redis软件"
+cd $redisPath
+./redis-server /opt/redis/redis.conf
+
+echo "开始启动zookeeper"
+cd $zookeeperPath
+./zkServer.sh start

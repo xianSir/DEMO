@@ -1,0 +1,11 @@
+#配置数据源
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/xks?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT
+    username: root
+    password: 123456
+    schema: classpath:db/table.sql
+    data: classpath:db/data.sql
+    initialization-mode: NEVER
+    type: com.alibaba.druid.pool.DruidDataSource

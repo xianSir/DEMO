@@ -1,0 +1,21 @@
+package 测试;
+
+
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.RestController;
+import 测试;
+
+/**
+ * <p>
+ * 测试 前端控制器
+ * </p>
+ *
+ * @author 测试
+ * @since 测试
+ */
+@RestController
+@RequestMapping("/测试/测试")
+public class 测试 extends true {
+ -----------------------------
+}

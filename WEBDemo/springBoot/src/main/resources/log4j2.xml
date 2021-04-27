@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+  <Appenders>
+    <Console name="CONSOLE" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d [%t] %-5p [%c] %X - %m%n"/>
+    </Console>
+
+    <RollingRandomAccessFile name="RollingFile" fileName="/logs/log/myApp.log" filePattern="/logs/log/myApp.log.%d{yyyy-MM-dd}_%i" immediateFlush="false" append="true">
+      <PatternLayout>
+        <pattern>%d [%t] %-5p [%c] %X - %m%n</pattern>
+      </PatternLayout>
+      <Policies>
+        <TimeBasedTriggeringPolicy modulate="true" interval="1"/>
+        <SizeBasedTriggeringPolicy size="10 MB"/>
+      </Policies>
+    </RollingRandomAccessFile>
+    <Async name="ASYNC">
+      <AppenderRef ref="RollingFile"/>
+      <AppenderRef ref="CONSOLE"/>
+    </Async>
+  </Appenders>
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="ASYNC"/>
+    </Root>
+    <logger name="com.xks" level="info" additivity="false">
+      <appender-ref ref="ASYNC"/>
+    </logger>
+    <!--<logger name="com.alibaba.dubbo.registry" level="warn" additivity="false">
+        <appender-ref ref="ASYNC"/>
+    </logger>-->
+  </Loggers>
+</Configuration>

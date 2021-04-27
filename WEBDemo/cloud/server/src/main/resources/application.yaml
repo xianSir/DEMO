@@ -1,0 +1,20 @@
+# 用过过程中注意hostname  顺序  !!! 否则会造成注册不到服务中心
+#配置集群是 serviceUrl为全部的注册中心地址 用 , 分隔 并允许注册中心注册自己
+server:
+  port: 8080
+
+spring:
+  application:
+    name: server-eureka
+
+
+eureka:
+  instance:
+    hostname: one
+    appname: server-eureka
+    prefer-ip-address: true #不使用主机名来定义注册中心地址
+  client:
+    service-url:
+      defaultZone: http://one:8080/eureka/  #,http://two:8081/eureka/
+    fetch-registry: false  #注册中心职责就是维护实例  不需要去检索服务
+    register-with-eureka: false #不向注册中心注册自己

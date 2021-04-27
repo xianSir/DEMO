@@ -1,0 +1,81 @@
+eureka 为注册中心
+    包含 :客户端(作用: 注册服务,发现服务)
+         服务端(作用: 维护服务实例)
+Ribbon 作用为服务消费
+    使用resttemplate 时 地址为http://+服务名称+uri  example: http://CLIENT-EUREKA/get
+
+dashboard : springBoot2.0以后访问地址 为http://192.168.0.18:8084/actuator/hystrix.stream
+            2.0以前 http://192.168.0.18:8084/hystrix.stream
+            注意访问地址
+
+dashboard 与feign 使用时 开启断容器  feign默认false  feign.hystrix.enabled=true
+--------------------------------------------------------------------------------------------------------------------------------------------------
+zuul :
+       添加前缀 /zuul   example : http://sky-20180914sjd:8085/zuul/api-a/get  此处暂定
+                zuul.servlet-path  设置前缀  默认 /zuul
+       乱码处理:  手动设置编码格式  response.setContentType("text/html;charset=UTF-8");
+zuul 路由默认规则 : serviceid/**  serviceid服务名
+    建议使用yaml属性文件进行配置  zuul的路由映射存在一个linkedhashmap 中 properties存入顺序无法保证
+    列如 : /hello/** 与 /hello/service/** r如果使用properties无法保证路由对应的服务实例
+    详情见 DiscoveryClientRouteLocator
+    SimpleRouteLocator(135行)
+        源代码:
+        protected ZuulRoute getZuulRoute(String adjustedPath) {
+            if (!matchesIgnoredPatterns(adjustedPath)) {
+                for (Entry<String, ZuulRoute> entry : getRoutesMap().entrySet()) {
+                    String pattern = entry.getKey();
+                    log.debug("Matching pattern:" + pattern);
+                    if (this.pathMatcher.match(pattern, adjustedPath)) {
+                        return entry.getValue();
+                    }
+                }
+            }
+            return null;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------
+
+# 用过过程中注意hostname  顺序  !!! 否则会造成注册不到服务中心
+#配置集群是 serviceUrl为全部的注册中心地址 用 , 分隔 并允许注册中心注册自己
+server.port= 8080
+
+spring.application.name= server-eureka
+eureka:
+  instance:
+    hostname: one
+    appname: server-eureka
+    prefer-ip-address: true #不使用主机名来定义注册中心地址
+  client:
+    service-url:
+      defaultZone: http://one:8080/eureka/,http://two:8081/eureka/
+    #fetch-registry: false  #注册中心职责就是维护实例  不需要去检索服务
+    #register-with-eureka: false #不向注册中心注册自己
+
+
+#f服务失效时间
+eureka.instance.lease-expiration-duration-in-seconds=90
+#服务续约时间 间隔
+eureka.instance.lease-renewal-interval-in-seconds=30
+#f服务缓存时间
+eureka.client.registry-fetch-interval-seconds=30
+#自我保护机制
+eureka.server.enable-self-preservation: false
+
+

@@ -1,0 +1,33 @@
+server:
+  servlet:
+    context-path: /dev
+  port: 8000
+#application.yml 可放在更目录以及 config目录下
+#     一个/config当前目录的子目录
+#     当前目录
+#     一个classpath /config包
+#     类路径根
+#     列表按优先级排序（在列表中较高位置定义的属性将覆盖在较低位置中定义的属性）
+#请求详情日志
+spring:
+  http:
+    log-request-details:  false
+  devtools:
+    restart:
+      additional-exclude: "index.html" #添加额外的文件
+      log-condition-evaluation-delta: false #禁用重启的日志记录
+      exclude:  com.xks
+      enabled:  false #关闭重启：
+#开启debug日志
+debug: true
+#所有日志包括tomcat
+#trace: true
+logging:
+  # file指定文件及名称 path指定目录  名称默认spring.log
+  #file: G:\xks\parent\springBoot\src\main\resources\mylog.log
+  max-size: 10MB
+  path: G:\xks\parent\springBoot\src\main\resources\my
+  file:
+    max-history: 10
+  config: /log4j2.xml
+

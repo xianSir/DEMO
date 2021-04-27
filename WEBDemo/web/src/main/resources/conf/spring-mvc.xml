@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:cache="http://www.springframework.org/schema/cache" xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-4.0.xsd
+		http://www.springframework.org/schema/cache
+		http://www.springframework.org/schema/cache/spring-cache-4.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+  <!--1.开启包扫描 -->
+  <context:component-scan base-package="com.xks,learn"/>
+  <!--静态资源过滤 或 交由spring处理-->
+  <mvc:default-servlet-handler/>
+  <!--<mvc:resources mapping="/" location="WEB-INF/.."/>-->
+  <!--2 配置url视图解析器-->
+  <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <property name="prefix" value="/"/>
+    <property name="suffix" value=".jsp"/>
+  </bean>-->
+  <!--3. 配置springmvc注解启用  @EnableWebMvc -->
+  <mvc:annotation-driven>
+    <!--异步-->
+    <mvc:async-support/>
+    <!--配置数据返回编码格式-->
+    <mvc:message-converters>
+      <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+        <constructor-arg value="UTF-8"/>
+      </bean>
+      <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <property name="charset" value="UTF-8"/>
+        <property name="supportedMediaTypes">
+          <list>
+            <value>application/json</value>
+            <value>text/html;charset=UTF-8</value>
+          </list>
+        </property>
+        <property name="features">
+          <list>
+            <value>WriteMapNullValue</value>
+            <value>QuoteFieldNames</value>
+            <value>WriteDateUseDateFormat</value>
+            <value>WriteEnumUsingToString</value>
+          </list>
+        </property>
+      </bean>
+    </mvc:message-converters>
+  </mvc:annotation-driven>
+  <!--4.springmvc拦截-->
+  <!-- <mvc:interceptors>
+     <mvc:interceptor>
+       <mvc:mapping path="/**"/>
+       <mvc:exclude-mapping path="/login"/>
+       &lt;!&ndash;添加自定义拦截器&ndash;&gt;
+       <bean>
+       </bean>
+     </mvc:interceptor>
+   </mvc:interceptors>-->
+  <!--5.文件上传-->
+  <!--<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    &lt;!&ndash; 设置最大上传文件大小100M &ndash;&gt;
+    <property name="maxUploadSize" value="104857600"></property>
+    <property name="maxInMemorySize" value="40960"/>
+    <property name="defaultEncoding" value="utf-8"></property>
+  </bean>-->
+</beans>
