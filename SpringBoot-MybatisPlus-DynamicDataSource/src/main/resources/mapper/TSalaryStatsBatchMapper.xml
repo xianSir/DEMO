@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxhz.maintain.pay.mapper.TSalaryStatsBatchMapper">
+
+    <resultMap id="BaseResultMap" type="com.xks.pay.entity.TSalaryStatsBatch">
+            <id property="id" column="ID" jdbcType="VARCHAR"/>
+            <result property="projectId" column="PROJECT_ID" jdbcType="VARCHAR"/>
+            <result property="salaryIds" column="SALARY_IDS" jdbcType="VARCHAR"/>
+            <result property="year" column="YEAR" jdbcType="VARCHAR"/>
+            <result property="month" column="MONTH" jdbcType="VARCHAR"/>
+            <result property="batchNo" column="BATCH_NO" jdbcType="VARCHAR"/>
+            <result property="batchName" column="BATCH_NAME" jdbcType="VARCHAR"/>
+            <result property="shouldPay" column="SHOULD_PAY" jdbcType="DECIMAL"/>
+            <result property="bankActPay" column="BANK_ACT_PAY" jdbcType="DECIMAL"/>
+            <result property="status" column="STATUS" jdbcType="VARCHAR"/>
+            <result property="payStatus" column="PAY_STATUS" jdbcType="VARCHAR"/>
+            <result property="isCread" column="IS_CREAD" jdbcType="VARCHAR"/>
+            <result property="isDeleted" column="IS_DELETED" jdbcType="DECIMAL"/>
+            <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+            <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ID,PROJECT_ID,SALARY_IDS,
+        YEAR,MONTH,BATCH_NO,
+        BATCH_NAME,SHOULD_PAY,BANK_ACT_PAY,
+        STATUS,PAY_STATUS,IS_CREAD,
+        IS_DELETED,CREATE_TIME,UPDATE_TIME,
+        DEL_FLAG
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from T_SALARY_STATS_BATCH
+        where  ID = #{id,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from T_SALARY_STATS_BATCH
+        where  ID = #{id,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xks.pay.entity.TSalaryStatsBatch" useGeneratedKeys="true">
+        insert into T_SALARY_STATS_BATCH
+        ( ID,PROJECT_ID,SALARY_IDS
+        ,YEAR,MONTH,BATCH_NO
+        ,BATCH_NAME,SHOULD_PAY,BANK_ACT_PAY
+        ,STATUS,PAY_STATUS,IS_CREAD
+        ,IS_DELETED,CREATE_TIME,UPDATE_TIME
+        ,DEL_FLAG)
+        values (#{id,jdbcType=VARCHAR},#{projectId,jdbcType=VARCHAR},#{salaryIds,jdbcType=VARCHAR}
+        ,#{year,jdbcType=VARCHAR},#{month,jdbcType=VARCHAR},#{batchNo,jdbcType=VARCHAR}
+        ,#{batchName,jdbcType=VARCHAR},#{shouldPay,jdbcType=DECIMAL},#{bankActPay,jdbcType=DECIMAL}
+        ,#{status,jdbcType=VARCHAR},#{payStatus,jdbcType=VARCHAR},#{isCread,jdbcType=VARCHAR}
+        ,#{isDeleted,jdbcType=DECIMAL},#{createTime,jdbcType=TIMESTAMP},#{updateTime,jdbcType=TIMESTAMP}
+        ,#{delFlag,jdbcType=VARCHAR}))
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xks.pay.entity.TSalaryStatsBatch" useGeneratedKeys="true">
+        insert into T_SALARY_STATS_BATCH
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="projectId != null">projectId,</if>
+                <if test="salaryIds != null">salaryIds,</if>
+                <if test="year != null">year,</if>
+                <if test="month != null">month,</if>
+                <if test="batchNo != null">batchNo,</if>
+                <if test="batchName != null">batchName,</if>
+                <if test="shouldPay != null">shouldPay,</if>
+                <if test="bankActPay != null">bankActPay,</if>
+                <if test="status != null">status,</if>
+                <if test="payStatus != null">payStatus,</if>
+                <if test="isCread != null">isCread,</if>
+                <if test="isDeleted != null">isDeleted,</if>
+                <if test="createTime != null">createTime,</if>
+                <if test="updateTime != null">updateTime,</if>
+                <if test="delFlag != null">delFlag,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">ID = #{id,jdbcType=VARCHAR},</if>
+                <if test="projectId != null">PROJECT_ID = #{projectId,jdbcType=VARCHAR},</if>
+                <if test="salaryIds != null">SALARY_IDS = #{salaryIds,jdbcType=VARCHAR},</if>
+                <if test="year != null">YEAR = #{year,jdbcType=VARCHAR},</if>
+                <if test="month != null">MONTH = #{month,jdbcType=VARCHAR},</if>
+                <if test="batchNo != null">BATCH_NO = #{batchNo,jdbcType=VARCHAR},</if>
+                <if test="batchName != null">BATCH_NAME = #{batchName,jdbcType=VARCHAR},</if>
+                <if test="shouldPay != null">SHOULD_PAY = #{shouldPay,jdbcType=DECIMAL},</if>
+                <if test="bankActPay != null">BANK_ACT_PAY = #{bankActPay,jdbcType=DECIMAL},</if>
+                <if test="status != null">STATUS = #{status,jdbcType=VARCHAR},</if>
+                <if test="payStatus != null">PAY_STATUS = #{payStatus,jdbcType=VARCHAR},</if>
+                <if test="isCread != null">IS_CREAD = #{isCread,jdbcType=VARCHAR},</if>
+                <if test="isDeleted != null">IS_DELETED = #{isDeleted,jdbcType=DECIMAL},</if>
+                <if test="createTime != null">CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},</if>
+                <if test="updateTime != null">UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},</if>
+                <if test="delFlag != null">DEL_FLAG = #{delFlag,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xks.pay.entity.TSalaryStatsBatch">
+        update T_SALARY_STATS_BATCH
+        <set>
+                <if test="projectId != null">
+                    PROJECT_ID = #{projectId,jdbcType=VARCHAR},
+                </if>
+                <if test="salaryIds != null">
+                    SALARY_IDS = #{salaryIds,jdbcType=VARCHAR},
+                </if>
+                <if test="year != null">
+                    YEAR = #{year,jdbcType=VARCHAR},
+                </if>
+                <if test="month != null">
+                    MONTH = #{month,jdbcType=VARCHAR},
+                </if>
+                <if test="batchNo != null">
+                    BATCH_NO = #{batchNo,jdbcType=VARCHAR},
+                </if>
+                <if test="batchName != null">
+                    BATCH_NAME = #{batchName,jdbcType=VARCHAR},
+                </if>
+                <if test="shouldPay != null">
+                    SHOULD_PAY = #{shouldPay,jdbcType=DECIMAL},
+                </if>
+                <if test="bankActPay != null">
+                    BANK_ACT_PAY = #{bankActPay,jdbcType=DECIMAL},
+                </if>
+                <if test="status != null">
+                    STATUS = #{status,jdbcType=VARCHAR},
+                </if>
+                <if test="payStatus != null">
+                    PAY_STATUS = #{payStatus,jdbcType=VARCHAR},
+                </if>
+                <if test="isCread != null">
+                    IS_CREAD = #{isCread,jdbcType=VARCHAR},
+                </if>
+                <if test="isDeleted != null">
+                    IS_DELETED = #{isDeleted,jdbcType=DECIMAL},
+                </if>
+                <if test="createTime != null">
+                    CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="updateTime != null">
+                    UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="delFlag != null">
+                    DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+                </if>
+        </set>
+        where   ID = #{id,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xks.pay.entity.TSalaryStatsBatch">
+        update T_SALARY_STATS_BATCH
+        set 
+            PROJECT_ID =  #{projectId,jdbcType=VARCHAR},
+            SALARY_IDS =  #{salaryIds,jdbcType=VARCHAR},
+            YEAR =  #{year,jdbcType=VARCHAR},
+            MONTH =  #{month,jdbcType=VARCHAR},
+            BATCH_NO =  #{batchNo,jdbcType=VARCHAR},
+            BATCH_NAME =  #{batchName,jdbcType=VARCHAR},
+            SHOULD_PAY =  #{shouldPay,jdbcType=DECIMAL},
+            BANK_ACT_PAY =  #{bankActPay,jdbcType=DECIMAL},
+            STATUS =  #{status,jdbcType=VARCHAR},
+            PAY_STATUS =  #{payStatus,jdbcType=VARCHAR},
+            IS_CREAD =  #{isCread,jdbcType=VARCHAR},
+            IS_DELETED =  #{isDeleted,jdbcType=DECIMAL},
+            CREATE_TIME =  #{createTime,jdbcType=TIMESTAMP},
+            UPDATE_TIME =  #{updateTime,jdbcType=TIMESTAMP},
+            DEL_FLAG =  #{delFlag,jdbcType=VARCHAR}
+        where   ID = #{id,jdbcType=VARCHAR} 
+    </update>
+</mapper>

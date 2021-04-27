@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxhz.maintain.pay.mapper.PayRollInfoMapper">
+
+    <resultMap id="BaseResultMap" type="com.xks.pay.entity.PayRollInfo">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="payRollCode" column="pay_roll_code" jdbcType="CHAR"/>
+            <result property="payRollName" column="pay_roll_name" jdbcType="VARCHAR"/>
+            <result property="projectCode" column="project_code" jdbcType="VARCHAR"/>
+            <result property="organizationCode" column="organization_code" jdbcType="INTEGER"/>
+            <result property="teamSysno" column="team_sysno" jdbcType="INTEGER"/>
+            <result property="payMonth" column="pay_month" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="contractorProjectCode" column="contractor_project_code" jdbcType="VARCHAR"/>
+            <result property="subContractorProjectCode" column="sub_contractor_project_code" jdbcType="VARCHAR"/>
+            <result property="attachFiles" column="attach_files" jdbcType="VARCHAR"/>
+            <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+            <result property="contractorProjectId" column="contractor_project_id" jdbcType="VARCHAR"/>
+            <result property="subContractorProjectId" column="sub_contractor_project_id" jdbcType="VARCHAR"/>
+            <result property="teamId" column="team_id" jdbcType="VARCHAR"/>
+            <result property="payDate" column="pay_date" jdbcType="TIMESTAMP"/>
+            <result property="payStartDate" column="pay_start_date" jdbcType="TIMESTAMP"/>
+            <result property="payEndDate" column="pay_end_date" jdbcType="TIMESTAMP"/>
+            <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+            <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+            <result property="organizationId" column="organization_id" jdbcType="VARCHAR"/>
+            <result property="bankStatus" column="bank_status" jdbcType="VARCHAR"/>
+            <result property="statNo" column="stat_no" jdbcType="VARCHAR"/>
+            <result property="statMsg" column="stat_msg" jdbcType="VARCHAR"/>
+            <result property="payType" column="pay_type" jdbcType="INTEGER"/>
+            <result property="bankType" column="bank_type" jdbcType="VARCHAR"/>
+            <result property="bankName" column="bank_name" jdbcType="VARCHAR"/>
+            <result property="bankNumber" column="bank_number" jdbcType="VARCHAR"/>
+            <result property="projectName" column="project_name" jdbcType="VARCHAR"/>
+            <result property="jbr" column="jbr" jdbcType="VARCHAR"/>
+            <result property="upuser" column="upuser" jdbcType="VARCHAR"/>
+            <result property="batchNumber" column="batch_number" jdbcType="CHAR"/>
+            <result property="receipt" column="receipt" jdbcType="VARCHAR"/>
+            <result property="isBackPay" column="is_back_pay" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,pay_roll_code,pay_roll_name,
+        project_code,organization_code,team_sysno,
+        pay_month,status,contractor_project_code,
+        sub_contractor_project_code,attach_files,project_id,
+        contractor_project_id,sub_contractor_project_id,team_id,
+        pay_date,pay_start_date,pay_end_date,
+        create_user,create_date,update_user,
+        update_date,organization_id,bank_status,
+        stat_no,stat_msg,pay_type,
+        bank_type,bank_name,bank_number,
+        project_name,jbr,upuser,
+        batch_number,receipt,is_back_pay
+    </sql>
+  <select id="deleteSalaryByBatch" resultType="string">
+    select deletPayRollInfoByBatchNumber(#{batch})
+  </select>
+</mapper>

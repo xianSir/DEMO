@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxhz.maintain.smz.mapper.ProjectWorkerMapper">
+
+    <resultMap id="BaseResultMap" type="com.xks.smz.entity.ProjectWorker">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="projectCode" column="project_code" jdbcType="VARCHAR"/>
+            <result property="workerId" column="worker_id" jdbcType="VARCHAR"/>
+            <result property="organizationCode" column="organization_code" jdbcType="VARCHAR"/>
+            <result property="teamSysno" column="team_sysno" jdbcType="INTEGER"/>
+            <result property="idcardType" column="idcard_type" jdbcType="VARCHAR"/>
+            <result property="idcardNumber" column="idcard_number" jdbcType="VARCHAR"/>
+            <result property="workTypeCode" column="work_type_code" jdbcType="CHAR"/>
+            <result property="cellPhone" column="cell_phone" jdbcType="VARCHAR"/>
+            <result property="issueCardtime" column="issue_cardtime" jdbcType="TIMESTAMP"/>
+            <result property="entryTime" column="entry_time" jdbcType="TIMESTAMP"/>
+            <result property="exitTime" column="exit_time" jdbcType="TIMESTAMP"/>
+            <result property="completeCardtime" column="complete_cardtime" jdbcType="TIMESTAMP"/>
+            <result property="cardNumber" column="card_number" jdbcType="VARCHAR"/>
+            <result property="cardType" column="card_type" jdbcType="VARCHAR"/>
+            <result property="hasContract" column="has_contract" jdbcType="VARCHAR"/>
+            <result property="contractCode" column="contract_code" jdbcType="VARCHAR"/>
+            <result property="workerAccommodationType" column="worker_accommodation_type" jdbcType="VARCHAR"/>
+            <result property="workerRole" column="worker_role" jdbcType="VARCHAR"/>
+            <result property="payRollbankCardNumber" column="pay_rollbank_card_number" jdbcType="VARCHAR"/>
+            <result property="payRollbankName" column="pay_rollbank_name" jdbcType="VARCHAR"/>
+            <result property="hasBuyinsurance" column="has_buyInsurance" jdbcType="VARCHAR"/>
+            <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+            <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+            <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+            <result property="organizationId" column="organization_id" jdbcType="VARCHAR"/>
+            <result property="teamId" column="team_id" jdbcType="VARCHAR"/>
+            <result property="delFlag" column="del_flag" jdbcType="INTEGER"/>
+            <result property="contractId" column="contract_id" jdbcType="VARCHAR"/>
+            <result property="workerDuty" column="worker_duty" jdbcType="VARCHAR"/>
+            <result property="numbr" column="numbr" jdbcType="VARCHAR"/>
+            <result property="wiegand" column="wiegand" jdbcType="VARCHAR"/>
+            <result property="entryStatus" column="entry_status" jdbcType="INTEGER"/>
+            <result property="delDate" column="del_date" jdbcType="TIMESTAMP"/>
+            <result property="hasSetSettlement" column="has_set_settlement" jdbcType="TINYINT"/>
+            <result property="hasSyschContract" column="has_sysch_contract" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,project_code,worker_id,
+        organization_code,team_sysno,idcard_type,
+        idcard_number,work_type_code,cell_phone,
+        issue_cardtime,entry_time,exit_time,
+        complete_cardtime,card_number,card_type,
+        has_contract,contract_code,worker_accommodation_type,
+        worker_role,pay_rollbank_card_number,pay_rollbank_name,
+        has_buyInsurance,create_user,create_date,
+        update_user,update_date,project_id,
+        organization_id,team_id,del_flag,
+        contract_id,worker_duty,numbr,
+        wiegand,entry_status,del_date,
+        has_set_settlement,has_sysch_contract
+    </sql>
+  <update id="updateWorkerRoleByWorkerId">
+    update smz_project_worker
+     set worker_role = #{workerRole,jdbcType=VARCHAR}
+    where
+    worker_id = #{workerId,jdbcType=VARCHAR}
+</update>
+</mapper>

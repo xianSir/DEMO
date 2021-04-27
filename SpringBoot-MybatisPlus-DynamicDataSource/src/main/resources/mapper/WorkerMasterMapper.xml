@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxhz.maintain.smz.mapper.WorkerMasterMapper">
+
+    <resultMap id="BaseResultMap" type="com.xks.smz.entity.WorkerMaster">
+            <id property="id" column="id" jdbcType="VARCHAR"/>
+            <result property="workerName" column="worker_name" jdbcType="VARCHAR"/>
+            <result property="idcardType" column="idcard_type" jdbcType="VARCHAR"/>
+            <result property="idcardNumber" column="idcard_number" jdbcType="VARCHAR"/>
+            <result property="gender" column="gender" jdbcType="VARCHAR"/>
+            <result property="nation" column="nation" jdbcType="VARCHAR"/>
+            <result property="birthday" column="birthday" jdbcType="TIMESTAMP"/>
+            <result property="birthPlaceCode" column="birth_place_code" jdbcType="VARCHAR"/>
+            <result property="address" column="address" jdbcType="VARCHAR"/>
+            <result property="politicsType" column="politics_type" jdbcType="VARCHAR"/>
+            <result property="organizationCode" column="organization_code" jdbcType="VARCHAR"/>
+            <result property="workerRole" column="worker_role" jdbcType="TINYINT"/>
+            <result property="cardCode" column="card_code" jdbcType="TINYINT"/>
+            <result property="cardNumber" column="card_number" jdbcType="VARCHAR"/>
+            <result property="isJoined" column="is_joined" jdbcType="VARCHAR"/>
+            <result property="joinedTime" column="joined_time" jdbcType="TIMESTAMP"/>
+            <result property="cellPhone" column="cell_phone" jdbcType="VARCHAR"/>
+            <result property="cultureLevelType" column="culture_level_type" jdbcType="VARCHAR"/>
+            <result property="hasBadMedicalHistory" column="has_bad_medical_history" jdbcType="VARCHAR"/>
+            <result property="urgentContractName" column="urgent_contract_name" jdbcType="VARCHAR"/>
+            <result property="urgentContractCellphone" column="urgent_contract_cellphone" jdbcType="VARCHAR"/>
+            <result property="workTypeCode" column="work_type_code" jdbcType="CHAR"/>
+            <result property="workDate" column="work_date" jdbcType="TIMESTAMP"/>
+            <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+            <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+            <result property="approvalStatus" column="approval_status" jdbcType="VARCHAR"/>
+            <result property="registerType" column="register_type" jdbcType="INTEGER"/>
+            <result property="numbr" column="numbr" jdbcType="VARCHAR"/>
+            <result property="wiegand" column="wiegand" jdbcType="VARCHAR"/>
+            <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+            <result property="deptId" column="dept_id" jdbcType="VARCHAR"/>
+            <result property="entryStatus" column="entry_status" jdbcType="INTEGER"/>
+            <result property="post" column="post" jdbcType="VARCHAR"/>
+            <result property="workerAccommodationType" column="worker_accommodation_type" jdbcType="INTEGER"/>
+            <result property="hasBuyinsurance" column="has_buyInsurance" jdbcType="INTEGER"/>
+            <result property="password" column="password" jdbcType="VARCHAR"/>
+            <result property="username" column="username" jdbcType="VARCHAR"/>
+            <result property="salt" column="salt" jdbcType="VARCHAR"/>
+            <result property="grantOrg" column="grant_org" jdbcType="VARCHAR"/>
+            <result property="negativeIdcardimageUrl" column="negative_idcardImage_url" jdbcType="VARCHAR"/>
+            <result property="startDate" column="start_date" jdbcType="TIMESTAMP"/>
+            <result property="expiryDate" column="expiry_date" jdbcType="TIMESTAMP"/>
+            <result property="maritalStatus" column="marital_status" jdbcType="CHAR"/>
+            <result property="eduLevel" column="edu_level" jdbcType="INTEGER"/>
+            <result property="degree" column="degree" jdbcType="INTEGER"/>
+            <result property="specialty" column="specialty" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,worker_name,idcard_type,
+        idcard_number,gender,nation,
+        birthday,birth_place_code,address,
+        politics_type,organization_code,worker_role,
+        card_code,card_number,is_joined,
+        joined_time,cell_phone,culture_level_type,
+        has_bad_medical_history,urgent_contract_name,urgent_contract_cellphone,
+        work_type_code,work_date,create_user,
+        create_date,update_user,update_date,
+        approval_status,register_type,numbr,
+        wiegand,org_id,dept_id,
+        entry_status,post,worker_accommodation_type,
+        has_buyInsurance,password,username,
+        salt,grant_org,negative_idcardImage_url,
+        start_date,expiry_date,marital_status,
+        edu_level,degree,specialty,
+        head_image
+    </sql>
+  <select id="selectByIdcardNumber" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from smz_worker_master where idcard_number = #{idcardNumber,jdbcType=VARCHAR}
+  </select>
+</mapper>

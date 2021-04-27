@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxhz.maintain.oracle.mapper.TSalaryListMapper">
+
+    <resultMap id="BaseResultMap" type="com.xks.oracle.entity.TSalaryList">
+            <id property="salaryid" column="SALARYID" jdbcType="VARCHAR"/>
+            <result property="companyid" column="COMPANYID" jdbcType="VARCHAR"/>
+            <result property="inputdate" column="INPUTDATE" jdbcType="TIMESTAMP"/>
+            <result property="jbr" column="JBR" jdbcType="VARCHAR"/>
+            <result property="remark4" column="REMARK4" jdbcType="VARCHAR"/>
+            <result property="startmonth" column="STARTMONTH" jdbcType="VARCHAR"/>
+            <result property="startyear" column="STARTYEAR" jdbcType="VARCHAR"/>
+            <result property="state" column="STATE" jdbcType="VARCHAR"/>
+            <result property="upuserid" column="UPUSERID" jdbcType="VARCHAR"/>
+            <result property="userid" column="USERID" jdbcType="VARCHAR"/>
+            <result property="statusCode" column="STATUS_CODE" jdbcType="VARCHAR"/>
+            <result property="updateTime" column="UPDATE_TIME" jdbcType="TIMESTAMP"/>
+            <result property="bankStatus" column="BANK_STATUS" jdbcType="VARCHAR"/>
+            <result property="bankactpay" column="BANKACTPAY" jdbcType="DECIMAL"/>
+            <result property="shouldpay" column="SHOULDPAY" jdbcType="DECIMAL"/>
+            <result property="projectid" column="PROJECTID" jdbcType="VARCHAR"/>
+            <result property="lbcompanyId" column="LBCOMPANY_ID" jdbcType="VARCHAR"/>
+            <result property="createTime" column="CREATE_TIME" jdbcType="TIMESTAMP"/>
+            <result property="delFlag" column="DEL_FLAG" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        SALARYID,COMPANYID,INPUTDATE,
+        JBR,REMARK4,STARTMONTH,
+        STARTYEAR,STATE,UPUSERID,
+        USERID,STATUS_CODE,UPDATE_TIME,
+        BANK_STATUS,BANKACTPAY,SHOULDPAY,
+        PROJECTID,LBCOMPANY_ID,CREATE_TIME,
+        DEL_FLAG
+    </sql>
+  <select id="selectByRemark4" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from T_SALARY_LIST where REMARK4 = #{remark4,jdbcType=VARCHAR}
+  </select>
+</mapper>
